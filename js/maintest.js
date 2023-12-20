@@ -2,11 +2,12 @@ const urlParams = new URLSearchParams(window.location.search);
 var moduleChosen = 2;
 moduleChosen = urlParams.get('module')
 
-let linkToJSON = `../data/Module ${moduleChosen}.json`
-let response = await fetch(linkToJSON)
+let linkToJSON = `../data/Module ${moduleChosen}.json`;
+let response = await fetch(linkToJSON);
 let module = await response.json();
 
 document.getElementById("moduleName").innerText = module.ModuleName;
+var descriptText1 = document.getElementById('descriptText1');
 var QuestionList = module.Questions;
 var CatInfo = module.CatInfos[0];
 var requireLevel = [CatInfo.QuestionRequired[0], CatInfo.QuestionRequired[1], CatInfo.QuestionRequired[2]];
@@ -52,10 +53,16 @@ function submitTest(){
         }
         indexOfQuestion++;
     };
+    descriptText1.innerText = `Bạn đã đúng ${currentQuestion.length - wrongAnswers}/${currentQuestion.length} câu.`;
     
     if(wrongAnswers <= wrongAnswerAllow){
-        alert('Chúc mừng bạn đã đạt đủ điểm');
-    } else alert('Chưa đủ điểm để đạt. Bạn cần cố gắng hơn!');
+        //alert('Chúc mừng bạn đã đạt đủ điểm');
+        descriptText1.innerText += ' Bạn đã đạt bài thi.';
+    } else{ 
+        //alert('Chưa đủ điểm để đạt. Bạn cần cố gắng hơn!');
+        descriptText1.innerText += ' Bạn chưa đạt bài thi.';
+    }
+    window.scrollTo(0, 0);
 }
 
 function resetTest(){
@@ -77,6 +84,8 @@ function ComputeNewQuestion(){
             tempIndex.splice(tempIndex.indexOf(index), 1);
         }
     }
+    descriptText1.innerText = `Số câu hỏi: ${currentQuestion.length} câu. Bạn cần đúng ${currentQuestion.length * 0.75} câu.`;
+    
 }
 
 function DisplayQuestion(){
