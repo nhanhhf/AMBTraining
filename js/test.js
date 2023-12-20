@@ -1,7 +1,13 @@
-let response = await fetch("../data/Module 2 - Physics.json")
+const queryString = window.location.search;
+console.log(queryString);
+const urlParams = new URLSearchParams(queryString);
+var moduleChosen = 2;
+moduleChosen = urlParams.get('module')
+console.log(moduleChosen);
+let linkToJSON = `../data/Module ${moduleChosen}.json`
+let response = await fetch(linkToJSON)
 let module = await response.json();
-
-// import module from '../data/Module 2 - Physics.json' assert {type: 'json'};
+console.log(module)
 
 document.getElementById("moduleName").innerText = module.ModuleName;
 var QuestionList = module.Questions;

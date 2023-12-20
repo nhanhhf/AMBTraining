@@ -1,17 +1,20 @@
-import module from '../data/Module 5 - Digital Electronic.json' assert {type: 'json'};
+const urlParams = new URLSearchParams(window.location.search);
+var moduleChosen = 2;
+moduleChosen = urlParams.get('module')
+
+let linkToJSON = `../data/Module ${moduleChosen}.json`
+let response = await fetch(linkToJSON)
+let module = await response.json();
 
 document.getElementById("moduleName").innerText = module.ModuleName;
-
 var QuestionList = module.Questions;
 var CatInfo = module.CatInfos[0];
 var requireLevel = [CatInfo.QuestionRequired[0], CatInfo.QuestionRequired[1], CatInfo.QuestionRequired[2]];
-
 let wrongAnswerAllow = 0.25 * (requireLevel[0] + requireLevel[1] + requireLevel[2]);
-console.log(wrongAnswerAllow);
 var levelIndex = [[],[],[]];
-QuestionList.forEach(question => {
-    levelIndex[question.Level - 1].push(question.Index);
-}); 
+for(let i = 0; i < QuestionList.length; i++){
+    levelIndex[QuestionList[i].Level - 1].push(QuestionList[i].Index);
+}
 var questionBlock_html = document.getElementById("questionsBlock");
 // Assign button function
 document.getElementById('submitButton').onclick = function() {submitTest()}
@@ -27,7 +30,7 @@ function submitTest(){
     }
     var indexOfQuestion = 1;
     let wrongAnswers = 0;
-    currentQuestion.forEach(question => {
+    for(var idx = 0; idx < currentQuestion.length; idx++){
         let name = 'Q' + indexOfQuestion.toString();
         //console.log("name: " + name);
         var ele = document.getElementsByName(name);
@@ -36,7 +39,7 @@ function submitTest(){
         for(var i = 0; i < ele.length; i++){
             if(ele[i].checked) playerChosen = i + 1; 
         }
-        var correctAnswer = question.CorrectAnswer;
+        var correctAnswer = currentQuestion[idx].CorrectAnswer;
         if(playerChosen != correctAnswer){
             wrongAnswers++;
             let temp = correctAnswer - 1;
@@ -48,7 +51,7 @@ function submitTest(){
             label.classList.add('wrongAnswer');
         }
         indexOfQuestion++;
-    });
+    };
     
     if(wrongAnswers <= wrongAnswerAllow){
         alert('Chúc mừng bạn đã đạt đủ điểm');
@@ -79,11 +82,11 @@ function ComputeNewQuestion(){
 function DisplayQuestion(){
     questionBlock_html.innerHTML = "";
     var indexOfQuestion = 1;
-    currentQuestion.forEach(question => {
+    for(var idx = 0; idx < currentQuestion.length; idx++){
         let newForm = document.createElement('form');
         var questionP = document.createElement('p');
         questionP.className = "questionString";
-        questionP.innerText = 'Câu ' + indexOfQuestion.toString() + ": " + question.QuestionString;
+        questionP.innerText = 'Câu ' + indexOfQuestion.toString() + ": " + currentQuestion[idx].QuestionString;
         questionBlock_html.appendChild(questionP);
         
         // Radio button & label
@@ -100,17 +103,15 @@ function DisplayQuestion(){
 
             // Label for Radio Button
             let newLabel = document.createElement('label');
-            newLabel.innerText = question.Answers[i];
+            newLabel.innerText = currentQuestion[idx].Answers[i];
             newLabel.htmlFor = id;
             let labelId = 'l' + indexOfQuestion.toString() + i.toString();
             newLabel.id = labelId;
             newLabel.classList.add('answerString');
             newForm.append(newLabel);
             newForm.append(document.createElement('br'));
-
-            
         }
         indexOfQuestion++;
         questionBlock_html.append(newForm);
-    });
+    }
 }
