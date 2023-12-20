@@ -1,23 +1,23 @@
 import module from '../data/Module 2 - Physics.json' assert {type: 'json'};
 
 document.getElementById("moduleName").innerText = module.ModuleName;
-alert(module.toString());
 var QuestionList = module.Questions;
 var CatInfo = module.CatInfos[0];
 var requireLevel = [CatInfo.QuestionRequired[0], CatInfo.QuestionRequired[1], CatInfo.QuestionRequired[2]];
-
+alert(1)
 let wrongAnswerAllow = 0.25 * (requireLevel[0] + requireLevel[1] + requireLevel[2]);
-console.log(wrongAnswerAllow);
 var levelIndex = [[],[],[]];
 for(let i = 0; i < QuestionList.length; i++){
     levelIndex[QuestionList[i].Level - 1].push(QuestionList[i].Index);
 }
+alert(2)
 var questionBlock_html = document.getElementById("questionsBlock");
 // Assign button function
 document.getElementById('submitButton').onclick = function() {submitTest()}
 document.getElementById('resetButton').onclick = function() {resetTest()}
 
 var currentQuestion = [];
+alert(3)
 ComputeNewQuestion();
 DisplayQuestion();
 
@@ -65,6 +65,7 @@ function resetTest(){
 }
 
 function ComputeNewQuestion(){
+    alert('New Question');
     currentQuestion = [];
     for(let i = 0; i < 3; i++){
         let tempIndex = levelIndex[i];
@@ -77,6 +78,7 @@ function ComputeNewQuestion(){
 }
 
 function DisplayQuestion(){
+    alert("Display question");
     questionBlock_html.innerHTML = "";
     var indexOfQuestion = 1;
     for(var idx = 0; idx < currentQuestion.length; idx++){
