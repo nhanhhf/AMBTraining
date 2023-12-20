@@ -16,10 +16,13 @@
 
     <script type="module" src="script.js"></script>
     
+    <button id="testButton">Test</button>
+    <br>
+    <br>
     <button id="module2Button" class="float-left submit-button" >Module 2</button>
     <button id="module3Button" class="float-left submit-button" >Module 3</button>
     <button id="module5Button" class="float-left submit-button" >Module 5</button>
-
+    <button id="module6Button" class="float-left submit-button" >Module 6</button>
     <script type="text/javascript">
         document.getElementById("module2Button").onclick = function () {
             location.href = "./page/module2test.html";
@@ -32,6 +35,10 @@
         };
         document.getElementById("module6Button").onclick = function () {
             location.href = "./page/module6test.html";
+        };
+
+        document.getElementById("testButton").onclick = function () {
+            location.href = "./page/test.html";
         };
     </script>
 
