@@ -4,7 +4,7 @@
 
 //import module from './data/Module 2 - Physics.json' assert {type: 'json'};
 
-console.log(module);
+//console.log(module);
 // console.log("fetch");
 // fetch('./data/Module 2 - Physics.json')
 //     .then((response) => response.json())
