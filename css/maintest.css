@@ -1,0 +1,15 @@
+.questionString{
+    font-weight: bold;
+}
+.button{
+    font-size: 16px;
+}
+.neutralAnswer{
+    color: black;
+}
+.wrongAnswer{
+    color: red;
+}
+.rightAnswer{
+    color: green;
+}

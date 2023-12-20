@@ -3,30 +3,32 @@
 
 <head>
     <title>Bank Training Web</title>
-    <meta lang="en" charset="UTF-8">
+    <meta lang="en" charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
     <div class="moduleSelectSection">
-        <div>One</div>
-        <div>Two</div>
-        <div>Three
-            <br>has
-            <br>three
-        </div>
-
+        <h1>Lựa chọn module</h1>
+        <p>Bản thử ban đầu nên các anh chỉ có thể chọn cơ bản thôi.</p>
     </div>
 
 
     <script type="module" src="script.js"></script>
-    <h1>Can you see me?</h1>
-    <p>My first paragraph.</p>
-    <button id="myButton" class="float-left submit-button" >Home</button>
+    
+    <button id="module2Button" class="float-left submit-button" >Module 2</button>
+    <button id="module3Button" class="float-left submit-button" >Module 3</button>
+    <button id="module5Button" class="float-left submit-button" >Module 5</button>
 
     <script type="text/javascript">
-        document.getElementById("myButton").onclick = function () {
-            location.href = "./page/maintest.html";
+        document.getElementById("module2Button").onclick = function () {
+            location.href = "./page/module2test.html";
+        };
+        document.getElementById("module3Button").onclick = function () {
+            location.href = "./page/module3test.html";
+        };
+        document.getElementById("module5Button").onclick = function () {
+            location.href = "./page/module5test.html";
         };
     </script>
 
