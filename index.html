@@ -6,34 +6,11 @@
     <meta lang="en" charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/index.css">
 </head>
-
 <body>
     <div class="moduleSelectSection">
         <h1>Lựa chọn module</h1>
-        <p>Bản thử ban đầu nên các anh chỉ có thể chọn cơ bản thôi.</p>
     </div>
-
-
     <script type="module" src="script.js"></script>
-    <button id="module2Button" class="float-left submit-button" >Module 2</button>
-    <button id="module3Button" class="float-left submit-button" >Module 3</button>
-    <button id="module5Button" class="float-left submit-button" >Module 5</button>
-    <button id="module6Button" class="float-left submit-button" >Module 6</button>
-    <script type="text/javascript">
-        document.getElementById("module2Button").onclick = function () {
-            location.href = "./page/maintest.html?module=2";
-        };
-        document.getElementById("module3Button").onclick = function () {
-            location.href = "./page/maintest.html?module=3";
-        };
-        document.getElementById("module5Button").onclick = function () {
-            location.href = "./page/maintest.html?module=5";
-        };
-        document.getElementById("module6Button").onclick = function () {
-            location.href = "./page/maintest.html?module=6";
-        };
-    </script>
-
+    <div id="moduleSelectDiv"> </div>
 </body>
-
 </html>

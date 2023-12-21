@@ -1,7 +1,7 @@
 const urlParams = new URLSearchParams(window.location.search);
-var moduleChosen = 2;
-moduleChosen = urlParams.get('module')
-
+const moduleChosen = urlParams.get('module')
+const isFullTest = urlParams.get('fullTest')
+console.log(isFullTest);
 let linkToJSON = `../data/Module ${moduleChosen}.json`;
 let response = await fetch(linkToJSON);
 let module = await response.json();
@@ -55,12 +55,12 @@ function submitTest(){
     };
     descriptText1.innerText = `Bạn đã đúng ${currentQuestion.length - wrongAnswers}/${currentQuestion.length} câu.`;
     
-    if(wrongAnswers <= wrongAnswerAllow){
-        //alert('Chúc mừng bạn đã đạt đủ điểm');
-        descriptText1.innerText += ' Bạn đã đạt bài thi.';
-    } else{ 
-        //alert('Chưa đủ điểm để đạt. Bạn cần cố gắng hơn!');
-        descriptText1.innerText += ' Bạn chưa đạt bài thi.';
+    if(isFullTest == 'false'){
+        if(wrongAnswers <= wrongAnswerAllow){
+            descriptText1.innerText += ' Bạn đã đạt bài thi.';
+        } else{ 
+            descriptText1.innerText += ' Bạn chưa đạt bài thi.';
+        }
     }
     window.scrollTo(0, 0);
 }
@@ -69,23 +69,33 @@ function resetTest(){
     if(confirm('Bạn muốn làm bài test mới?') != true){
         return;
     }
-
     ComputeNewQuestion();
     DisplayQuestion();
 }
 
 function ComputeNewQuestion(){
     currentQuestion = [];
-    for(let i = 0; i < 3; i++){
-        let tempIndex = levelIndex[i];
-        for(let j = 0; j < requireLevel[i]; j++){
-            let index = tempIndex[Math.floor(Math.random() * tempIndex.length)];
-            currentQuestion.push(QuestionList[index-1]);
-            tempIndex.splice(tempIndex.indexOf(index), 1);
+    if(isFullTest == 'true'){
+        for(let i = 0; i < 3; i++){
+            if(requireLevel[i] > 0){
+                for(let j = 0; j < levelIndex[i].length; j++){
+                    let index = levelIndex[i][j]
+                    currentQuestion.push(QuestionList[index - 1]);
+                }
+            }
         }
+        descriptText1.innerText = `Số câu hỏi: ${currentQuestion.length} câu.`;
+    } else {
+        for(let i = 0; i < 3; i++){
+            let tempIndex = levelIndex[i];
+            for(let j = 0; j < requireLevel[i]; j++){
+                let index = tempIndex[Math.floor(Math.random() * tempIndex.length)];
+                currentQuestion.push(QuestionList[index-1]);
+                tempIndex.splice(tempIndex.indexOf(index), 1);
+            }
+        }
+        descriptText1.innerText = `Số câu hỏi: ${currentQuestion.length} câu. Bạn cần đúng ${currentQuestion.length * 0.75} câu.`;
     }
-    descriptText1.innerText = `Số câu hỏi: ${currentQuestion.length} câu. Bạn cần đúng ${currentQuestion.length * 0.75} câu.`;
-    
 }
 
 function DisplayQuestion(){
