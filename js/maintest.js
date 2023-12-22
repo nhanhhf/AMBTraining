@@ -5,6 +5,7 @@ console.log(isFullTest);
 let linkToJSON = `../data/Module ${moduleChosen}.json`;
 let response = await fetch(linkToJSON);
 let module = await response.json();
+var isFullTestRandom = false;
 
 document.getElementById("moduleName").innerText = module.ModuleName;
 var descriptText1 = document.getElementById('descriptText1');
@@ -23,6 +24,8 @@ document.getElementById('resetButton').onclick = function() {resetTest()}
 
 var currentQuestion = [];
 ComputeNewQuestion();
+
+AddRandomButton();
 DisplayQuestion();
 
 function submitTest(){
@@ -31,7 +34,7 @@ function submitTest(){
     }
     var indexOfQuestion = 1;
     let wrongAnswers = 0;
-    for(var idx = 0; idx < currentQuestion.length; idx++){
+    for(let idx = 0; idx < currentQuestion.length; idx++){
         let name = 'Q' + indexOfQuestion.toString();
         //console.log("name: " + name);
         var ele = document.getElementsByName(name);
@@ -101,6 +104,7 @@ function ComputeNewQuestion(){
 function DisplayQuestion(){
     questionBlock_html.innerHTML = "";
     var indexOfQuestion = 1;
+    if(isFullTestRandom) shuffle(currentQuestion);
     for(var idx = 0; idx < currentQuestion.length; idx++){
         let newForm = document.createElement('form');
         var questionP = document.createElement('p');
@@ -132,5 +136,43 @@ function DisplayQuestion(){
         }
         indexOfQuestion++;
         questionBlock_html.append(newForm);
+    }
+}
+
+function AddRandomButton(){
+    if(isFullTest == 'true'){
+        var buttonHeaderDiv = document.getElementById('buttonHeaderDiv');
+        var randomButton = document.createElement('button');
+        randomButton.id = 'randomStateButton';
+        if(isFullTestRandom == false){
+            randomButton.innerText = 'Xáo trộn câu hỏi: Tắt';
+        } else {
+            randomButton.innerText = 'Xáo trộn câu hỏi: Bật';
+        }
+        
+        randomButton.classList.add('button');
+        randomButton.onclick = changeRandomState;
+        buttonHeaderDiv.append(randomButton);
+    }
+}
+
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
+
+function changeRandomState(){
+    isFullTestRandom = !isFullTestRandom;
+    var t = document.getElementById('randomStateButton');
+    if(isFullTestRandom == false){
+        t.innerText = 'Xáo trộn câu hỏi: Tắt';
+    } else {
+        t.innerText = 'Xáo trộn câu hỏi: Bật';
     }
 }
