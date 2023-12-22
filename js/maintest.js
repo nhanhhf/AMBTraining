@@ -1,4 +1,5 @@
 const urlParams = new URLSearchParams(window.location.search);
+const swapPos = [[0,1,2], [0,2,1], [1,0,2],[1,2,0],[2,0,1],[2,1,0]];
 const moduleChosen = urlParams.get('module')
 const isFullTest = urlParams.get('fullTest')
 console.log(isFullTest);
@@ -43,7 +44,7 @@ function submitTest(){
         for(var i = 0; i < ele.length; i++){
             if(ele[i].checked) playerChosen = i + 1; 
         }
-        var correctAnswer = currentQuestion[idx].CorrectAnswer;
+        let correctAnswer = currentQuestion[idx].CorrectAnswer;
         if(playerChosen != correctAnswer){
             wrongAnswers++;
             let temp = correctAnswer - 1;
@@ -83,7 +84,7 @@ function ComputeNewQuestion(){
             if(requireLevel[i] > 0){
                 for(let j = 0; j < levelIndex[i].length; j++){
                     let index = levelIndex[i][j]
-                    currentQuestion.push(QuestionList[index - 1]);
+                    currentQuestion.push(SwapAnswer(QuestionList[index - 1]));
                 }
             }
         }
@@ -93,12 +94,25 @@ function ComputeNewQuestion(){
             let tempIndex = levelIndex[i];
             for(let j = 0; j < requireLevel[i]; j++){
                 let index = tempIndex[Math.floor(Math.random() * tempIndex.length)];
-                currentQuestion.push(QuestionList[index-1]);
+                currentQuestion.push(SwapAnswer(QuestionList[index-1]));
                 tempIndex.splice(tempIndex.indexOf(index), 1);
             }
         }
         descriptText1.innerText = `Số câu hỏi: ${currentQuestion.length} câu. Bạn cần đúng ${currentQuestion.length * 0.75} câu.`;
     }
+}
+
+function SwapAnswer(question){
+    let si = Math.floor(Math.random() * 6);
+    let newAnswer = [];
+    let newCorrectAnswer;
+    for(let k = 0; k < 3; k++){
+        newAnswer.push(question.Answers[swapPos[si][k]]);
+        if(swapPos[si][k] + 1 == question.CorrectAnswer) newCorrectAnswer = k + 1;
+    }
+    question.Answers = newAnswer;
+    question.CorrectAnswer = newCorrectAnswer;
+    return question;
 }
 
 function DisplayQuestion(){
