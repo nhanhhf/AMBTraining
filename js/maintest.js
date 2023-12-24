@@ -3,7 +3,10 @@ const swapPos = [[0,1,2], [0,2,1], [1,0,2],[1,2,0],[2,0,1],[2,1,0]];
 const moduleChosen = urlParams.get('module')
 const isFullTest = urlParams.get('fullTest')
 console.log(isFullTest);
-let linkToJSON = `../data/Module ${moduleChosen}.json`;
+if(isFullTest == 'true'){
+    var linkToJSON = `../data/Module ${moduleChosen}.json`;
+} else var linkToJSON = `../data/test/Module ${moduleChosen}.json`;
+
 let response = await fetch(linkToJSON);
 let module = await response.json();
 var isFullTestRandom = false;
