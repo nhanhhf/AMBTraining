@@ -1,4 +1,4 @@
-const moduleList = [2, 3, 5, 6, 8];
+const moduleList = [2, 3, 5, 6, 8, 9];
 var moduleSelectDiv = document.getElementById('moduleSelectDiv');
 for(let i = 0; i < moduleList.length; i++){
     let module = moduleList[i];
