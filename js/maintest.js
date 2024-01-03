@@ -3,7 +3,13 @@ const swapPos = [[0,1,2], [0,2,1], [1,0,2],[1,2,0],[2,0,1],[2,1,0]];
 const moduleChosen = urlParams.get('module')
 const isFullTest = urlParams.get('fullTest')
 console.log(isFullTest);
-const linkToJSON = `../data/test/Module ${moduleChosen}.json`;
+var linkToJSON;
+if(isFullTest == 'false'){
+    linkToJSON = `../data/test/Module ${moduleChosen}.json`;
+} else {
+    linkToJSON = `../data/bank/Module ${moduleChosen}.json`;
+}
+
 let response = await fetch(linkToJSON);
 let module = await response.json();
 var isFullTestRandom = false;
