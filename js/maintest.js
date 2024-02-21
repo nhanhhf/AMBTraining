@@ -1,18 +1,17 @@
 const urlParams = new URLSearchParams(window.location.search);
 const swapPos = [[0,1,2], [0,2,1], [1,0,2],[1,2,0],[2,0,1],[2,1,0]];
+const moduleList = [2, 3, 5, 6, 8, 9, 7];
+const subPart = [1, 1, 1, 1, 1, 1, 2];
 const moduleChosen = urlParams.get('module')
-const isFullTest = urlParams.get('fullTest')
-console.log(isFullTest);
-var linkToJSON;
-if(isFullTest == 'false'){
-    linkToJSON = `../data/test/Module ${moduleChosen}.json`;
-} else {
-    linkToJSON = `../data/bank/Module ${moduleChosen}.json`;
-}
+const subPartChosen = urlParams.get('subPart')
+const linkToJSON = `../data/test/Module ${moduleChosen}.json`;
+console.log(linkToJSON)
 
 let response = await fetch(linkToJSON);
 let module = await response.json();
 var isFullTestRandom = false;
+var isFullTest;
+if(subPartChosen === '0'){isFullTest = false} else isFullTest = true;
 
 document.getElementById("moduleName").innerText = module.ModuleName;
 var descriptText1 = document.getElementById('descriptText1');
@@ -20,17 +19,13 @@ var QuestionList = module.Questions;
 var CatInfo = module.CatInfos[0];
 var requireLevel = [CatInfo.QuestionRequired[0], CatInfo.QuestionRequired[1], CatInfo.QuestionRequired[2]];
 let wrongAnswerAllow = 0.25 * (requireLevel[0] + requireLevel[1] + requireLevel[2]);
-var levelIndex = [[],[],[]];
-for(let i = 0; i < QuestionList.length; i++){
-    levelIndex[QuestionList[i].Level - 1].push(QuestionList[i].Index);
-}
+
 var questionBlock_html = document.getElementById("questionsBlock");
 // Assign button function
 document.getElementById('submitButton').onclick = function() {submitTest()}
 document.getElementById('resetButton').onclick = function() {resetTest()}
 
-var currentQuestion = [];
-ComputeNewQuestion();
+var currentQuestion = ComputeNewQuestion();
 
 AddRandomButton();
 DisplayQuestion();
@@ -43,9 +38,7 @@ function submitTest(){
     let wrongAnswers = 0;
     for(let idx = 0; idx < currentQuestion.length; idx++){
         let name = 'Q' + indexOfQuestion.toString();
-        //console.log("name: " + name);
         var ele = document.getElementsByName(name);
-        //console.log(ele);
         var playerChosen = 0;
         for(var i = 0; i < ele.length; i++){
             if(ele[i].checked) playerChosen = i + 1; 
@@ -55,10 +48,7 @@ function submitTest(){
             wrongAnswers++;
             let temp = correctAnswer - 1;
             let id = 'l' + indexOfQuestion.toString() + (temp).toString();
-            // console.log(id);
-            // console.log(document.getElementById(id));
             var label = document.getElementById(id);
-            // console.log(label);
             label.classList.add('wrongAnswer');
         }
         indexOfQuestion++;
@@ -84,28 +74,44 @@ function resetTest(){
 }
 
 function ComputeNewQuestion(){
-    currentQuestion = [];
-    if(isFullTest == 'true'){
-        for(let i = 0; i < 3; i++){
-            if(requireLevel[i] > 0){
-                for(let j = 0; j < levelIndex[i].length; j++){
-                    let index = levelIndex[i][j]
-                    currentQuestion.push(SwapAnswer(QuestionList[index - 1]));
-                }
+    var newQuestions = [];
+    if(isFullTest == true){
+        var possibleQuestion = [];
+        for(let i = 0; i < QuestionList.length; i++){
+            let level = QuestionList[i].Level - 1;
+            if(requireLevel[level] > 0){
+                possibleQuestion.push(SwapAnswer(QuestionList[i]));
             }
         }
-        descriptText1.innerText = `Số câu hỏi: ${currentQuestion.length} câu.`;
+        var moduleIndex;
+        for(let i = 0; i < moduleList.length; i++) if(moduleList[i] == moduleChosen) moduleIndex = i;
+        var subPartCount = subPart[moduleIndex];
+        if(subPartCount > 1){
+            newQuestions = possibleQuestion.slice((subPartChosen - 1) / subPartCount * possibleQuestion.length, subPartChosen/ subPartCount * possibleQuestion.length);
+        } else {
+            newQuestions = possibleQuestion;
+        }
+
+
+        descriptText1.innerText = `Số câu hỏi: ${newQuestions.length} câu.`;
     } else {
+        var levelIndex = [[],[],[]];
+        for(let i = 0; i < QuestionList.length; i++){
+            levelIndex[QuestionList[i].Level - 1].push(QuestionList[i].Index);
+        }
         for(let i = 0; i < 3; i++){
             let tempIndex = levelIndex[i];
             for(let j = 0; j < requireLevel[i]; j++){
                 let index = tempIndex[Math.floor(Math.random() * tempIndex.length)];
-                currentQuestion.push(SwapAnswer(QuestionList[index-1]));
+                newQuestions.push(SwapAnswer(QuestionList[index-1]));
                 tempIndex.splice(tempIndex.indexOf(index), 1);
             }
         }
-        descriptText1.innerText = `Số câu hỏi: ${currentQuestion.length} câu. Bạn cần đúng ${currentQuestion.length * 0.75} câu.`;
+        descriptText1.innerText = `Số câu hỏi: ${newQuestions.length} câu. Bạn cần đúng ${newQuestions.length * 0.75} câu.`;
     }
+    if(isFullTestRandom) shuffle(newQuestions);
+    
+    return newQuestions;
 }
 
 function SwapAnswer(question){
@@ -124,7 +130,7 @@ function SwapAnswer(question){
 function DisplayQuestion(){
     questionBlock_html.innerHTML = "";
     var indexOfQuestion = 1;
-    if(isFullTestRandom) shuffle(currentQuestion);
+    
     for(var idx = 0; idx < currentQuestion.length; idx++){
         let newForm = document.createElement('form');
         var questionP = document.createElement('p');
