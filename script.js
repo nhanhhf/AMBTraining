@@ -1,4 +1,4 @@
-const configFilePath = "../js/config.json"
+const configFilePath = "js/config.json"
 
 let configRespone = await fetch(configFilePath)
 let configs = await configRespone.json();  
