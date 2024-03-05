@@ -1,14 +1,31 @@
 const urlParams = new URLSearchParams(window.location.search);
+
+// CONFIG
+const configFilePath = `../js/config.json`
+let configRespone = await fetch(configFilePath)
+let configs = await configRespone.json();
+console.log(configs) 
 const swapPos = [[0,1,2], [0,2,1], [1,0,2],[1,2,0],[2,0,1],[2,1,0]];
-const moduleList = [2, 3, 5, 6, 8, 9, 7];
-const subPart = [1, 1, 1, 1, 1, 1, 2];
+const moduleList = configs.moduleList;
+const subPart = configs.subPart;
 const moduleChosen = urlParams.get('module')
 const subPartChosen = urlParams.get('subPart')
-const linkToJSON = `../data/test/Module ${moduleChosen}.json`;
-console.log(linkToJSON)
+const moduleVer = urlParams.get('mVer')
+var response, module
+if(moduleVer > 0){
+    const linkToJSON = `../data/test/Module ${moduleChosen}-${moduleVer}.json`;
+    response = await fetch(linkToJSON);
+    module = await response.json();
+} else {
+    const linkToJSON = `../data/test/Module ${moduleChosen}.json`;
+    response = await fetch(linkToJSON);
+    module = await response.json();
+}
 
-let response = await fetch(linkToJSON);
-let module = await response.json();
+console.log(module)
+
+
+
 var isFullTestRandom = false;
 var isFullTest;
 if(subPartChosen === '0'){isFullTest = false} else isFullTest = true;
@@ -85,7 +102,7 @@ function ComputeNewQuestion(){
         }
         var moduleIndex;
         for(let i = 0; i < moduleList.length; i++) if(moduleList[i] == moduleChosen) moduleIndex = i;
-        var subPartCount = subPart[moduleIndex];
+        var subPartCount = subPart[moduleIndex][moduleVer];
         if(subPartCount > 1){
             newQuestions = possibleQuestion.slice((subPartChosen - 1) / subPartCount * possibleQuestion.length, subPartChosen/ subPartCount * possibleQuestion.length);
         } else {
