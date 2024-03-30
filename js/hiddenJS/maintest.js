@@ -1,7 +1,7 @@
 const urlParams = new URLSearchParams(window.location.search);
 
 // CONFIG
-const configFilePath = `../js/config.json`
+const configFilePath = `../../js/hiddenJS/config.json`
 let configRespone = await fetch(configFilePath)
 let configs = await configRespone.json();
 console.log(configs) 
@@ -13,11 +13,11 @@ const subPartChosen = urlParams.get('subPart')
 const moduleVer = urlParams.get('mVer')
 var response, module
 if(moduleVer > 0){
-    const linkToJSON = `../data/test/Module ${moduleChosen}-${moduleVer}.json`;
+    const linkToJSON = `../../data/hiddenTest/Module ${moduleChosen}-${moduleVer}.json`;
     response = await fetch(linkToJSON);
     module = await response.json();
 } else {
-    const linkToJSON = `../data/test/Module ${moduleChosen}.json`;
+    const linkToJSON = `../data/hiddenTest/Module ${moduleChosen}.json`;
     response = await fetch(linkToJSON);
     module = await response.json();
 }

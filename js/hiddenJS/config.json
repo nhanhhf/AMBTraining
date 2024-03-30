@@ -1,0 +1,5 @@
+{
+    "moduleList"    : [1, 2],
+    "moduleVersions": [1, 1],
+    "subPart"       : [[3], [1]]
+}
