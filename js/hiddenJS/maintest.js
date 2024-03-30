@@ -17,7 +17,7 @@ if(moduleVer > 0){
     response = await fetch(linkToJSON);
     module = await response.json();
 } else {
-    const linkToJSON = `../data/hiddenTest/Module ${moduleChosen}.json`;
+    const linkToJSON = `../../data/hiddenTest/Module ${moduleChosen}.json`;
     response = await fetch(linkToJSON);
     module = await response.json();
 }
