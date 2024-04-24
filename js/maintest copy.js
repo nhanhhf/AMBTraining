@@ -5,26 +5,27 @@ const configFilePath = `../js/config.json`
 let configRespone = await fetch(configFilePath)
 let configs = await configRespone.json();
 console.log(configs) 
+const swapPos = [[0,1,2], [0,2,1], [1,0,2],[1,2,0],[2,0,1],[2,1,0]];
 const moduleList = configs.moduleList;
 const subPart = configs.subPart;
-const index = urlParams.get('index')
+const moduleChosen = urlParams.get('module')
 const subPartChosen = urlParams.get('subPart')
 const moduleVer = urlParams.get('mVer')
 var response, module
-
-// get data bank
-var moduleCode = configs.moduleCode[index]
 if(moduleVer > 0){
-    const linkToJSON = `../data/test/${moduleCode}-${moduleVer}.json`;
+    const linkToJSON = `../data/test/Module ${moduleChosen}-${moduleVer}.json`;
     response = await fetch(linkToJSON);
     module = await response.json();
 } else {
-    const linkToJSON = `../data/test/${moduleCode}.json`;
+    const linkToJSON = `../data/test/Module ${moduleChosen}.json`;
     response = await fetch(linkToJSON);
     module = await response.json();
 }
 
-console.log(module) 
+console.log(module)
+
+
+
 var isFullTestRandom = false;
 var isFullTest;
 if(subPartChosen === '0'){isFullTest = false} else isFullTest = true;
@@ -92,37 +93,61 @@ function resetTest(){
 function ComputeNewQuestion(){
     var newQuestions = [];
     if(isFullTest == true){
-        var subPartCount = subPart[index][moduleVer];
-        if(subPartCount > 1){
-            newQuestions = QuestionList.slice((subPartChosen - 1) / subPartCount * QuestionList.length, subPartChosen/ subPartCount * QuestionList.length);
-            console.log();
-        } else {
-            newQuestions = QuestionList;
+        var possibleQuestion = [];
+        for(let i = 0; i < QuestionList.length; i++){
+            let level = QuestionList[i].Level - 1;
+            if(requireLevel[level] > 0){
+                possibleQuestion.push(SwapAnswer(QuestionList[i]));
+            }
         }
-        descriptText1.innerText = `Số câu hỏi: ${newQuestions.length}. Câu hỏi ${(subPartChosen - 1) / subPartCount * QuestionList.length + 1} - ${subPartChosen/ subPartCount * QuestionList.length}.`;
+        var moduleIndex;
+        for(let i = 0; i < moduleList.length; i++) if(moduleList[i] == moduleChosen) moduleIndex = i;
+        var subPartCount = subPart[moduleIndex][moduleVer];
+        if(subPartCount > 1){
+            newQuestions = possibleQuestion.slice((subPartChosen - 1) / subPartCount * possibleQuestion.length, subPartChosen/ subPartCount * possibleQuestion.length);
+        } else {
+            newQuestions = possibleQuestion;
+        }
+
+
+        descriptText1.innerText = `Số câu hỏi: ${newQuestions.length} câu.`;
     } else {
-        // var levelIndex = [[],[],[]];
-        // for(let i = 0; i < QuestionList.length; i++){
-        //     levelIndex[QuestionList[i].Level - 1].push(QuestionList[i].Index);
-        // }
-        // for(let i = 0; i < 3; i++){
-        //     let tempIndex = levelIndex[i];
-        //     for(let j = 0; j < requireLevel[i]; j++){
-        //         let index = tempIndex[Math.floor(Math.random() * tempIndex.length)];
-        //         newQuestions.push(SwapAnswer(QuestionList[index-1]));
-        //         tempIndex.splice(tempIndex.indexOf(index), 1);
-        //     }
-        // }
-        // descriptText1.innerText = `Số câu hỏi: ${newQuestions.length} câu. Bạn cần đúng ${newQuestions.length * 0.75} câu.`;
+        var levelIndex = [[],[],[]];
+        for(let i = 0; i < QuestionList.length; i++){
+            levelIndex[QuestionList[i].Level - 1].push(QuestionList[i].Index);
+        }
+        for(let i = 0; i < 3; i++){
+            let tempIndex = levelIndex[i];
+            for(let j = 0; j < requireLevel[i]; j++){
+                let index = tempIndex[Math.floor(Math.random() * tempIndex.length)];
+                newQuestions.push(SwapAnswer(QuestionList[index-1]));
+                tempIndex.splice(tempIndex.indexOf(index), 1);
+            }
+        }
+        descriptText1.innerText = `Số câu hỏi: ${newQuestions.length} câu. Bạn cần đúng ${newQuestions.length * 0.75} câu.`;
     }
     if(isFullTestRandom) shuffle(newQuestions);
+    
     return newQuestions;
+}
+
+function SwapAnswer(question){
+    let si = Math.floor(Math.random() * 6);
+    let newAnswer = [];
+    let newCorrectAnswer;
+    for(let k = 0; k < 3; k++){
+        newAnswer.push(question.Answers[swapPos[si][k]]);
+        if(swapPos[si][k] + 1 == question.CorrectAnswer) newCorrectAnswer = k + 1;
+    }
+    question.Answers = newAnswer;
+    question.CorrectAnswer = newCorrectAnswer;
+    return question;
 }
 
 function DisplayQuestion(){
     questionBlock_html.innerHTML = "";
-    var subPartCount = subPart[index][moduleVer];
-    var indexOfQuestion = (subPartChosen - 1) / subPartCount * QuestionList.length + 1;
+    var indexOfQuestion = 1;
+    
     
     for(var idx = 0; idx < currentQuestion.length; idx++){
         let newForm = document.createElement('form');
@@ -131,9 +156,9 @@ function DisplayQuestion(){
         questionP.innerText = 'Câu ' + indexOfQuestion.toString() + ": " + currentQuestion[idx].QuestionString;
         questionBlock_html.appendChild(questionP);
         
-        // Display 3 answers randomly
+        // Radio button & label
         for(let i = 0; i < 3; i++){
-            // Radio button for each answer
+            // Radio button
             let newRadioInput = document.createElement('input');
             newRadioInput.type = 'radio';
             let id = 'q' + indexOfQuestion.toString() + i.toString();
@@ -143,7 +168,7 @@ function DisplayQuestion(){
             newRadioInput.name = radioName;
             newForm.append(newRadioInput);
 
-            // Display answer
+            // Label for Radio Button
             let newLabel = document.createElement('label');
             newLabel.innerText = currentQuestion[idx].Answers[i];
             newLabel.htmlFor = id;
@@ -159,7 +184,7 @@ function DisplayQuestion(){
 }
 
 function AddRandomButton(){
-    if(isFullTest){
+    if(isFullTest == 'true'){
         var buttonHeaderDiv = document.getElementById('buttonHeaderDiv');
         var randomButton = document.createElement('button');
         randomButton.id = 'randomStateButton';
@@ -173,20 +198,6 @@ function AddRandomButton(){
         randomButton.onclick = changeRandomState;
         buttonHeaderDiv.append(randomButton);
     }
-}
-
-function SwapAnswer(question){
-    const swapPos = [[0,1,2], [0,2,1], [1,0,2],[1,2,0],[2,0,1],[2,1,0]];
-    let si = Math.floor(Math.random() * 6);
-    let newAnswer = [];
-    let newCorrectAnswer;
-    for(let k = 0; k < 3; k++){
-        newAnswer.push(question.Answers[swapPos[si][k]]);
-        if(swapPos[si][k] + 1 == question.CorrectAnswer) newCorrectAnswer = k + 1;
-    }
-    question.Answers = newAnswer;
-    question.CorrectAnswer = newCorrectAnswer;
-    return question;
 }
 
 function shuffle(a) {
@@ -209,4 +220,3 @@ function changeRandomState(){
         t.innerText = 'Xáo trộn câu hỏi: Bật';
     }
 }
-
