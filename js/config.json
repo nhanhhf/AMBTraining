@@ -1,10 +1,13 @@
 {
-    "moduleList"    :   9,
+    "moduleList"    :   14,
     "moduleCode"    : ["Module 2", "Module 3", "Module 5", "Module 6", "Module 8",
-    "Module 7", "ToF", "Struct-Gen", "Struct-Aero"],
+    "Module 7", "ToF", "Struct-Gen", "Struct-Aero", "ATA 21","ATA 31", "ATA 22",
+    "ATA 23", "ATA 34"],
     "moduleName"    : ["Module 2", "Module 3", "Module 5", "Module 6", "Module 8",
-    "Module 7", "Theory of Flight", "Structure - General", "Structure - Aeroplane"],
-    "moduleVersions": [1 , 1,  1,  2,  1,  2, 1, 1, 1],
-    "verifyTest"    : [0, 0, 0, -1, 0, 0, -1, -1, -1],
-    "subPart"       : [[1], [1], [1], [2, 1], [1], [1, 3], [1], [1], [1]]
+    "Module 7", "Theory of Flight", "Structure - General", "Structure - Aeroplane",  "ATA 21","ATA 31", "ATA 22",
+    "ATA 23", "ATA 34"],
+    "moduleVersions": [1 , 1,  1,  2,  1,  2, 2, 2, 2, 1, 1, 1, 1, 1],
+    "verifyTest"    : [0, 0, 0, -1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0],
+    "subPart"       : [[1], [1], [1], [2, 1], [1], [1, 3], [1, 1], [1, 1], [1, 1],
+    [1], [1], [1], [1], [1]]
 }
