@@ -93,13 +93,15 @@ function ComputeNewQuestion(){
     var newQuestions = [];
     if(isFullTest == true){
         var subPartCount = subPart[index][moduleVer];
+        var first = Math.floor((subPartChosen - 1) / subPartCount * QuestionList.length);
+        var last = Math.floor(subPartChosen/ subPartCount * QuestionList.length);
         if(subPartCount > 1){
-            newQuestions = QuestionList.slice((subPartChosen - 1) / subPartCount * QuestionList.length, subPartChosen/ subPartCount * QuestionList.length);
+            newQuestions = QuestionList.slice(first, last);
             console.log();
         } else {
             newQuestions = QuestionList;
         }
-        descriptText1.innerText = `Số câu hỏi: ${newQuestions.length}. Câu hỏi ${(subPartChosen - 1) / subPartCount * QuestionList.length + 1} - ${subPartChosen/ subPartCount * QuestionList.length}.`;
+        descriptText1.innerText = `Số câu hỏi: ${newQuestions.length}. Câu hỏi ${first + 1} - ${last}.`;
     } else {
         // var levelIndex = [[],[],[]];
         // for(let i = 0; i < QuestionList.length; i++){
@@ -122,7 +124,7 @@ function ComputeNewQuestion(){
 function DisplayQuestion(){
     questionBlock_html.innerHTML = "";
     var subPartCount = subPart[index][moduleVer];
-    var indexOfQuestion = (subPartChosen - 1) / subPartCount * QuestionList.length + 1;
+    var indexOfQuestion = Math.floor((subPartChosen - 1) / subPartCount * QuestionList.length + 1);
     
     for(var idx = 0; idx < currentQuestion.length; idx++){
         let newForm = document.createElement('form');
