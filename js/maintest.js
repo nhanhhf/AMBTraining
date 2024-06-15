@@ -50,7 +50,8 @@ function submitTest(){
     if(confirm('Bạn muốn nộp bài?') != true){
         return;
     }
-    var indexOfQuestion = 1;
+    var subPartCount = subPart[index][moduleVer];
+    var indexOfQuestion = Math.floor((subPartChosen - 1) / subPartCount * QuestionList.length + 1);;
     let wrongAnswers = 0;
     for(let idx = 0; idx < currentQuestion.length; idx++){
         let name = 'Q' + indexOfQuestion.toString();
