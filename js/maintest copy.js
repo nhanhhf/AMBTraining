@@ -4,7 +4,14 @@ const urlParams = new URLSearchParams(window.location.search);
 const configFilePath = `../js/config.json`
 let configRespone = await fetch(configFilePath)
 let configs = await configRespone.json();
-console.log(configs) 
+console.log(configs)
+/// TESTING
+const configFilePath2 = `../js/newConfig.json`
+let configRespone2 = await fetch(configFilePath)
+let configs2 = await configRespone.json();
+console.log(configs2)
+/// TESTING
+ 
 const swapPos = [[0,1,2], [0,2,1], [1,0,2],[1,2,0],[2,0,1],[2,1,0]];
 const moduleList = configs.moduleList;
 const subPart = configs.subPart;

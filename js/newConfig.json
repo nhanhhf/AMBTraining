@@ -1,0 +1,30 @@
+{
+    "courses":[
+        { 
+            "cName" : "BASIC CAT A",
+            "cCode" : "BASICA",
+            "moduleList" : [
+                {"mName":"Module 2", "mCode":"Module 2", "mBanks": 1, "mVerifyTest":0, "subPart":[0]}
+            ]
+
+        },
+        {
+            "cName" : "Type Training A320 CAT A",
+            "cCode" : "A320CatA",
+            "moduleList" : [
+                {"mName":"ATA 00", "mCode":"ATA 00", "mBanks": 1, "mVerifyTest":-1, "subPart":[0]},
+                {"mName":"ATA 24: Electrical Power", "mCode":"ATA 24", "mBanks": 1, "mVerifyTest":-1, "subPart":[0]},
+                {"mName":"ATA 31: Indicating/Recording Systems", "mCode":"ATA 31", "mBanks": 1, "mVerifyTest":-1, "subPart":[0]},
+                {"mName":"ATA 00", "mCode":"ATA 00", "mBanks": 1, "mVerifyTest":-1, "subPart":[0]},
+                {"mName":"ATA 00", "mCode":"ATA 00", "mBanks": 1, "mVerifyTest":-1, "subPart":[0]},
+                {"mName":"ATA 00", "mCode":"ATA 00", "mBanks": 1, "mVerifyTest":-1, "subPart":[0]},
+                {"mName":"ATA 00", "mCode":"ATA 00", "mBanks": 1, "mVerifyTest":-1, "subPart":[0]},
+                {"mName":"ATA 00", "mCode":"ATA 00", "mBanks": 1, "mVerifyTest":-1, "subPart":[0]},
+                {"mName":"ATA 00", "mCode":"ATA 00", "mBanks": 1, "mVerifyTest":-1, "subPart":[0]},
+                {"mName":"ATA 00", "mCode":"ATA 00", "mBanks": 1, "mVerifyTest":-1, "subPart":[0]},
+                {"mName":"ATA 00", "mCode":"ATA 00", "mBanks": 1, "mVerifyTest":-1, "subPart":[0]},
+                {"mName":"ATA 00", "mCode":"ATA 00", "mBanks": 1, "mVerifyTest":-1, "subPart":[0]}
+            ]
+        }
+    ]
+}

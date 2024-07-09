@@ -4,7 +4,13 @@ const urlParams = new URLSearchParams(window.location.search);
 const configFilePath = `../js/config.json`
 let configRespone = await fetch(configFilePath)
 let configs = await configRespone.json();
-console.log(configs) 
+console.log(configs)
+/// TESTING
+const configFilePath2 = `../js/newConfig.json`
+let configRespone2 = await fetch(configFilePath2)
+let configs2 = await configRespone2.json();
+console.log(configs2.courses[1])
+/// TESTING 
 const moduleList = configs.moduleList;
 const subPart = configs.subPart;
 const index = urlParams.get('index')
@@ -24,7 +30,7 @@ if(moduleVer > 0){
     module = await response.json();
 }
 
-console.log(module) 
+//console.log(module) 
 var isFullTestRandom = false;
 var isFullTest;
 if(subPartChosen === '0'){isFullTest = false} else isFullTest = true;
