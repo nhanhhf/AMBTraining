@@ -1,10 +1,10 @@
 {
-    "moduleList"    :   8,
+    "moduleList"    :   9,
     "moduleCode"    : ["ATA 00 - A320", "ATA 22 - A320", "ATA 24 - A320", "ATA 31 - A320","ATA 33 - A320",
-    "ATA 26 - A320", "ATA 30 - A320", "ATA 46 - A320"],
+    "ATA 26 - A320", "ATA 30 - A320", "ATA 46 - A320", "ATA 35 - A320"],
     "moduleName"    : ["ATA 00 - A320", "ATA 22 - A320", "ATA 24 - A320", "ATA 31 - A320","ATA 33 - A320",
-    "ATA 26 - A320", "ATA 30 - A320", "ATA 46 - A320"],
-    "moduleVersions": [1, 1, 1, 1, 1, 1 , 1,  1,  1],
-    "verifyTest"    : [-1,-1,-1,-1,-1, -1, -1],
-    "subPart"       : [[1],[1],[1],[1],[1], [1], [1], [1], [1]]
+    "ATA 26 - A320", "ATA 30 - A320", "ATA 46 - A320", "ATA 35 - A320"],
+    "moduleVersions": [1, 1, 1, 1, 1, 1 , 1,  1,  1, 1],
+    "verifyTest"    : [-1,-1,-1,-1,-1, -1, -1, -1],
+    "subPart"       : [[1],[1],[1],[1],[1], [1], [1], [1], [1], [1]]
 }
