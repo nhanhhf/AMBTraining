@@ -32,6 +32,7 @@ if(moduleVer > 0){
 
 //console.log(module) 
 var isFullTestRandom = false;
+var level3Only = 0;
 var isFullTest;
 if(subPartChosen === '0'){isFullTest = false} else isFullTest = true;
 
@@ -50,6 +51,7 @@ document.getElementById('resetButton').onclick = function() {resetTest()}
 var currentQuestion = ComputeNewQuestion();
 
 AddRandomButton();
+AddRemoveLevel3Button();
 DisplayQuestion();
 
 function submitTest(){
@@ -92,7 +94,7 @@ function resetTest(){
     if(confirm('Bạn muốn làm bài test mới?') != true){
         return;
     }
-    ComputeNewQuestion();
+    currentQuestion = ComputeNewQuestion();
     DisplayQuestion();
 }
 
@@ -102,12 +104,26 @@ function ComputeNewQuestion(){
         var subPartCount = subPart[index][moduleVer];
         var first = Math.floor((subPartChosen - 1) / subPartCount * QuestionList.length);
         var last = Math.floor(subPartChosen/ subPartCount * QuestionList.length);
-        if(subPartCount > 1){
-            newQuestions = QuestionList.slice(first, last);
-            console.log();
-        } else {
-            newQuestions = QuestionList;
+        newQuestions = QuestionList.slice(first, last);
+        newQuestions.forEach(question => {
+            question = SwapAnswer(question)
+        });
+        if(level3Only == -1){
+            for(var i = 0; i < newQuestions.length; i++){
+                if(newQuestions[i].Level == 3){
+                    newQuestions.splice(i,1);
+                    i--;
+                }
+            }
+        } else if(level3Only == 1){
+            for(var i = 0; i < newQuestions.length; i++){
+                if(newQuestions[i].Level != 3){
+                    newQuestions.splice(i,1);
+                    i--;
+                }
+            }
         }
+        console.log(newQuestions)
         descriptText1.innerText = `Số câu hỏi: ${newQuestions.length}. Câu hỏi ${first + 1} - ${last}.`;
     } else {
         // var levelIndex = [[],[],[]];
@@ -184,6 +200,17 @@ function AddRandomButton(){
     }
 }
 
+function AddRemoveLevel3Button(){
+    var buttonHeaderDiv = document.getElementById('buttonHeaderDiv');
+    var level3Button = document.createElement('button');
+    level3Button.id = 'level3StateButton';
+    console.log(level3Only)
+    level3Button.classList.add('button');
+    level3Button.onclick = changeLevel3State;
+    buttonHeaderDiv.append(level3Button);
+    setLevel3ButtonText();
+}
+
 function SwapAnswer(question){
     const swapPos = [[0,1,2], [0,2,1], [1,0,2],[1,2,0],[2,0,1],[2,1,0]];
     let si = Math.floor(Math.random() * 6);
@@ -219,3 +246,19 @@ function changeRandomState(){
     }
 }
 
+function setLevel3ButtonText(){
+    var level3Button = document.getElementById('level3StateButton');
+    if(level3Only == 0){
+        level3Button.innerText = 'Giữ level 3';
+    } else if (level3Only == -1){
+        level3Button.innerText = 'Bỏ level 3';
+    } else if (level3Only == 1) {
+        level3Button.innerText = 'Chỉ còn level 3';
+    }
+}
+function changeLevel3State(){
+    if(level3Only == 0) {level3Only = -1}
+    else if(level3Only == -1) {level3Only = 1}
+    else level3Only = 0
+    setLevel3ButtonText();
+}
