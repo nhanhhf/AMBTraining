@@ -27,12 +27,12 @@ for(let i = 0; i < moduleList; i++){
             moduleSelectDiv.append(fullBankButton);
             moduleSelectDiv.append(document.createTextNode( '\u00A0')   );
         }
-        moduleSelectDiv.append(document.createElement('\p'))    
-        // var normalTestButton = document.createElement('button');  
-        // normalTestButton.innerText='Làm bài Test';
-        // normalTestButton.onclick = function(){navigateTestPage(module, k, 0)}
-        // moduleSelectDiv.append(normalTestButton);
-        // moduleSelectDiv.append(document.createElement('\p'))
+        //moduleSelectDiv.append(document.createElement('\p'))    
+        var normalTestButton = document.createElement('button');  
+        normalTestButton.innerText='Làm bài Test';
+        normalTestButton.onclick = function(){navigateTestPage(i, k, -1)}
+        moduleSelectDiv.append(normalTestButton);
+        moduleSelectDiv.append(document.createElement('\p'))
     }
 }
 

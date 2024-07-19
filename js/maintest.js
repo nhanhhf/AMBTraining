@@ -34,7 +34,7 @@ if(moduleVer > 0){
 var isFullTestRandom = false;
 var level3Only = 0;
 var isFullTest;
-if(subPartChosen === '0'){isFullTest = false} else isFullTest = true;
+if(subPartChosen >= '0'){isFullTest = false} else isFullTest = true;
 
 document.getElementById("moduleName").innerText = module.ModuleName;
 var descriptText1 = document.getElementById('descriptText1');
@@ -60,6 +60,7 @@ function submitTest(){
     }
     var subPartCount = subPart[index][moduleVer];
     var indexOfQuestion = Math.floor((subPartChosen - 1) / subPartCount * QuestionList.length + 1);;
+    if(isFullTest) indexOfQuestion = 1;
     let wrongAnswers = 0;
     for(let idx = 0; idx < currentQuestion.length; idx++){
         let name = 'Q' + indexOfQuestion.toString();
@@ -80,7 +81,7 @@ function submitTest(){
     };
     descriptText1.innerText = `Bạn đã đúng ${currentQuestion.length - wrongAnswers}/${currentQuestion.length} câu.`;
     
-    if(isFullTest == 'false'){
+    if(isFullTest){
         if(wrongAnswers <= wrongAnswerAllow){
             descriptText1.innerText += ' Bạn đã đạt bài thi.';
         } else{ 
@@ -100,7 +101,7 @@ function resetTest(){
 
 function ComputeNewQuestion(){
     var newQuestions = [];
-    if(isFullTest == true){
+    if(!isFullTest){
         var subPartCount = subPart[index][moduleVer];
         var first = Math.floor((subPartChosen - 1) / subPartCount * QuestionList.length);
         var last = Math.floor(subPartChosen/ subPartCount * QuestionList.length);
@@ -126,6 +127,18 @@ function ComputeNewQuestion(){
         console.log(newQuestions)
         descriptText1.innerText = `Số câu hỏi: ${newQuestions.length}. Câu hỏi ${first + 1} - ${last}.`;
     } else {
+        console.log("a")
+        var qIndex = [];
+        for(let i = 0; i < QuestionList.length; i++){
+            qIndex.push(i);
+        }
+        for(let i = 0; i < 16; i++){
+            let index = Math.floor(Math.random() * qIndex.length);
+            newQuestions.push(QuestionList[index]);
+            qIndex.splice(index, 1);
+        }
+        console.log(newQuestions)
+        descriptText1.innerText = `Số câu hỏi: ${newQuestions.length} câu. Bạn cần đúng ${newQuestions.length * 0.75} câu.`;
         // var levelIndex = [[],[],[]];
         // for(let i = 0; i < QuestionList.length; i++){
         //     levelIndex[QuestionList[i].Level - 1].push(QuestionList[i].Index);
@@ -148,7 +161,7 @@ function DisplayQuestion(){
     questionBlock_html.innerHTML = "";
     var subPartCount = subPart[index][moduleVer];
     var indexOfQuestion = Math.floor((subPartChosen - 1) / subPartCount * QuestionList.length + 1);
-    
+    if(isFullTest) indexOfQuestion = 1;
     for(var idx = 0; idx < currentQuestion.length; idx++){
         let newForm = document.createElement('form');
         var questionP = document.createElement('p');
@@ -184,7 +197,7 @@ function DisplayQuestion(){
 }
 
 function AddRandomButton(){
-    if(isFullTest){
+    if(!isFullTest){
         var buttonHeaderDiv = document.getElementById('buttonHeaderDiv');
         var randomButton = document.createElement('button');
         randomButton.id = 'randomStateButton';
@@ -201,14 +214,16 @@ function AddRandomButton(){
 }
 
 function AddRemoveLevel3Button(){
-    var buttonHeaderDiv = document.getElementById('buttonHeaderDiv');
-    var level3Button = document.createElement('button');
-    level3Button.id = 'level3StateButton';
-    console.log(level3Only)
-    level3Button.classList.add('button');
-    level3Button.onclick = changeLevel3State;
-    buttonHeaderDiv.append(level3Button);
-    setLevel3ButtonText();
+    if(!isFullTest){
+        var buttonHeaderDiv = document.getElementById('buttonHeaderDiv');
+        var level3Button = document.createElement('button');
+        level3Button.id = 'level3StateButton';
+        console.log(level3Only)
+        level3Button.classList.add('button');
+        level3Button.onclick = changeLevel3State;
+        buttonHeaderDiv.append(level3Button);
+        setLevel3ButtonText();
+    }
 }
 
 function SwapAnswer(question){
